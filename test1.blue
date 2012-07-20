@@ -1,0 +1,17 @@
+[general]
+observables  = 1
+measurements = el mu
+uncertainties  = stat lumi jes
+
+[measurements]
+el = 0.0794
+mu = 0.0782
+
+[uncertainties]
+el = 0.1 0.03 0.1
+mu = 0.1 0.03 0.15
+
+[correlations]
+stat = [ [ 1, 0 ], [ 0, 1 ] ]
+lumi = [ [ 1, 1 ], [ 1, 1 ] ]
+jes  = [ [ 1, 1 ], [ 1, 1 ] ]
