@@ -1,0 +1,24 @@
+[general]
+observables  = 1
+measurements = ea eb ta tb
+uncertainties  = tot
+
+[measurements]
+ea = 0.105
+eb = 0.135
+ta = 0.095
+tb = 0.140
+
+[uncertainties]
+ea_u = 0.01
+ea_d = 0.01
+eb_u = 0.03
+eb_d = 0.03
+ta_u = 0.03
+ta_d = 0.03
+tb_u = 0.03
+tb_d = 0.03
+
+
+[correlations]
+tot = [ [ 1, 0, 0, 0 ], [ 0, 1, 0, 0 ], [ 0, 0, 1, 0 ], [ 0, 0, 0, 1 ] ]

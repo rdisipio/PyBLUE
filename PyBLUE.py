@@ -9,7 +9,7 @@ from ConfigParser import SafeConfigParser
 
 
 def CalcCovariance( variation = 'm' ):
-    covtot = matrix( [ [0,0], [0,0] ] )
+    covtot = matrix( [ [0] * Nobservables ] * Nobservables )
     for syst, rho in correlations.iteritems():
         #if syst == "lumi": continue
         #sv = array( [ unc[0][syst], unc[1][syst] ] )
