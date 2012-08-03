@@ -1,0 +1,18 @@
+[general]
+observables  = 1
+measurements = el mu
+uncertainties  = syst
+
+[measurements]
+el = 456.534
+mu = 532.886
+
+[uncertainties]
+el_u = 72.773
+el_d = 61.489
+mu_u = 83.111
+mu_d = 56.743
+
+
+[correlations]
+syst = [ [ 1, 0 ], [ 0, 1 ] ]

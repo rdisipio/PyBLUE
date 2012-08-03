@@ -4,6 +4,38 @@ import sys, os
 from numpy import *
 from ConfigParser import SafeConfigParser
 
+
+############################################
+
+
+def CalcCovariance( variation = 'm' ):
+    covtot = matrix( [ [0,0], [0,0] ] )
+    for syst, rho in correlations.iteritems():
+        #if syst == "lumi": continue
+        #sv = array( [ unc[0][syst], unc[1][syst] ] )
+        slist = []
+        for channel in unc[variation]:
+            slist.append( channel[syst] )
+
+        sv = array( slist )
+        sm = diag( sv )
+
+        cov = sm * rho * sm
+
+        #cov = matrix( [ [ s[0] * s[0] * rho[0,0], s[0] * s[1] * rho[0,1] ], \
+        #      [ s[1] * s[0] * rho[1,0], s[1] * s[1] * rho[1,1] ] ] )
+
+        print syst + ":"
+        print cov
+        covtot = covtot + cov
+
+    print "Total Covariance matrix for variation", variation, ":"
+    print covtot
+    return covtot
+
+############################################
+
+
 parser = SafeConfigParser()
 parser.read( sys.argv[1] )
 
@@ -21,23 +53,49 @@ Nuncertainties = len( uncertainties_descriptions )
 print "INFO: Number of uncertainties:", Nuncertainties
 print "INFO: Uncertainties:", uncertainties_descriptions
 
-unc = []
+#unc = []
+unc  = {
+    'u' : [],
+    'm' : [],
+    'd' : []
+    }
+
+blue_central = {}
+blue_unc     = {}
+for variation in unc.keys():
+    blue_central[variation] = 0.
+    blue_unc[variation]     = 0.
 
 measurements = array( Nmeasurements * [ 0. ] )
-c = 0
+n_c = 0
 for channel in measurements_descriptions:
-    measurements[c] = float( parser.get( 'measurements', channel ) )
-    c += 1
+    measurements[n_c] = float( parser.get( 'measurements', channel ) )
+    n_c += 1
 
-    unc_ch = {}
-    all_unc_this_ch = [ float(num) for num in parser.get( "uncertainties", channel ).split() ]
-    u = 0
+    unc_ch = {
+        'u' : {},
+        'm' : {},
+        'd' : {}
+        }
+    channel_u = channel + "_u"
+    channel_d = channel + "_d"
+    
+    all_unc_this_ch_u = [ float(num) for num in parser.get( "uncertainties", channel_u ).split() ]
+    all_unc_this_ch_d = [ float(num) for num in parser.get( "uncertainties", channel_d ).split() ]
+    all_unc_this_ch_m = [ 0.5 * ( up + down ) for up in all_unc_this_ch_u for down in all_unc_this_ch_d ]
+
+    n_u = 0
     for s_unc in uncertainties_descriptions:
-        unc_ch[s_unc] = all_unc_this_ch[u]
-        u += 1
-    unc.append( unc_ch )
-print "INFO: Measurements:", measurements
+        unc_ch['u'][s_unc] = all_unc_this_ch_u[n_u]
+        unc_ch['m'][s_unc] = all_unc_this_ch_m[n_u]
+        unc_ch['d'][s_unc] = all_unc_this_ch_d[n_u]
+        n_u += 1
 
+    for variation in unc_ch.keys():
+        unc[variation].append( unc_ch[variation] )
+
+        
+print "INFO: Measurements:", measurements
 
 correlations = {}
 for s_unc in uncertainties_descriptions:
@@ -45,48 +103,42 @@ for s_unc in uncertainties_descriptions:
     correlations[s_unc] = matrix( m )
 
 
-covtot = matrix( [ [0,0], [0,0] ] )
-for syst, rho in correlations.iteritems():
-    #if syst == "lumi": continue
-    #sv = array( [ unc[0][syst], unc[1][syst] ] )
-    slist = []
-    for channel in unc:
-        slist.append( channel[syst] )
+for variation in [ 'u', 'd', 'm' ]:
+    cov = CalcCovariance( variation )
+
+    invcov = linalg.pinv( cov )
+
+    #print "Inverse Total Covariance matrix:"
+    #print invcov
+
+    unitvector = array( Nmeasurements * [ 1 ] )
+    l = dot( unitvector, invcov )
+    d = dot( unitvector, invcov )
+    d = dot( d, unitvector.transpose() )
+    l = l / d
+
+    print "Combination weights for variation", variation, ":"
+    print l
+
+    res = dot( l, measurements )
+
+    totunc = sqrt( dot( l, dot( cov, l.transpose() ) ) )
+
+    blue_central[variation] = float( res )
+    blue_unc[variation]     = float( totunc )
+
+print
+print "/------------------------------------/"
+print
+print "Final results:"
+print
+for variation in [ 'u', 'd', 'm' ]:
+    print "Combination(%s) = %5.4f \pm %5.4f" % ( variation, blue_central[variation], blue_unc[variation] ) 
+    print
     
-    sv = array( slist )
-    sm = diag( sv )
+# AIB
+R_u = blue_unc['u'] / ( blue_unc['u'] + blue_unc['d'] )
+sigma_u = 2. * R_u * blue_unc['m']
+sigma_d = 2. * ( 1. - R_u ) * blue_unc['m']
 
-    cov = sm * rho * sm
-
-    #cov = matrix( [ [ s[0] * s[0] * rho[0,0], s[0] * s[1] * rho[0,1] ], \
-    #      [ s[1] * s[0] * rho[1,0], s[1] * s[1] * rho[1,1] ] ] )
-    
-    print syst + ":"
-    print cov
-    covtot = covtot + cov
-
-print "Total Covariance matrix:"
-print covtot
-
-invcov = linalg.inv( covtot )
-
-#print "Inverse Total Covariance matrix:"
-#print invcov
-
-unitvector = array( Nmeasurements * [ 1 ] )
-l = dot( unitvector, invcov )
-d = dot( unitvector, invcov )
-d = dot( d, unitvector.transpose() )
-l = l / d
-
-print "Combination weights:"
-print l
-
-res = dot( l, measurements )
-
-totunc = sqrt( dot( l, dot( covtot, l.transpose() ) ) )
-
-print "Result:"
-print res, " \pm ", totunc
-
-
+print "Combination(AIB) = %5.4f +%5.4f -%5.4f" % ( blue_central['m'], sigma_u, sigma_d )
