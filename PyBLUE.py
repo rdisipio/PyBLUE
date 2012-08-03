@@ -22,10 +22,7 @@ def CalcCovariance( variation = 'm' ):
 
         cov = sm * rho * sm
 
-        #cov = matrix( [ [ s[0] * s[0] * rho[0,0], s[0] * s[1] * rho[0,1] ], \
-        #      [ s[1] * s[0] * rho[1,0], s[1] * s[1] * rho[1,1] ] ] )
-
-        print syst + ":"
+        print "Source of uncertainty:",syst
         print cov
         covtot = covtot + cov
 
@@ -35,11 +32,13 @@ def CalcCovariance( variation = 'm' ):
 
 ############################################
 
-
+if len( sys.argv ) == 1:
+    print "Usage: ./PyBLUE config.blue"
+    exit(0)
+    
 parser = SafeConfigParser()
 parser.read( sys.argv[1] )
 
-#config_general = parser.options( 'general' )
 Nobservables = int( parser.get( 'general', 'observables' ) )
 print "INFO: Number of observables:", Nobservables
 
@@ -53,7 +52,6 @@ Nuncertainties = len( uncertainties_descriptions )
 print "INFO: Number of uncertainties:", Nuncertainties
 print "INFO: Uncertainties:", uncertainties_descriptions
 
-#unc = []
 unc  = {
     'u' : [],
     'm' : [],
@@ -106,10 +104,8 @@ for s_unc in uncertainties_descriptions:
 for variation in [ 'u', 'd', 'm' ]:
     cov = CalcCovariance( variation )
 
+    # pinv = pseudo-inverse. workaround for non-invertible matrices
     invcov = linalg.pinv( cov )
-
-    #print "Inverse Total Covariance matrix:"
-    #print invcov
 
     unitvector = array( Nmeasurements * [ 1 ] )
     l = dot( unitvector, invcov )
