@@ -1,0 +1,18 @@
+[general]
+observables  = 1
+measurements = el mu
+uncertainties  = gen
+
+[measurements]
+el = 67.9222 
+mu =  70.4615
+
+[uncertainties]
+el_u = 7.20306
+el_d = 7.20306
+mu_u = 6.35103
+mu_d = 6.35103
+
+
+[correlations]
+gen = [ [ 1, 1 ], [ 1, 1 ] ]

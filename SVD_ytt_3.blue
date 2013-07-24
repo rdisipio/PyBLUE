@@ -1,0 +1,41 @@
+[general]
+observables  = 1
+measurements = el mu
+uncertainties  = stat EffectiveNP-MODEL1 EffectiveNP-STAT1 EtaIntercalibration-Theory btagsf closeby flavor-response ifsr jes lepidsf leprecosf lumi mcatnlo mu_qcd_shape muid mums musc pdf ps qcdE el_qcd_shape qcdM wjets_bbccc wjets_ca 
+
+[measurements]
+el = 67.919
+mu = 70.4596
+
+[uncertainties]
+el_u = 1.37551 1.44521 0.83577  0.228172 3.53811 0.932167 0.8377   2.24592 1.1588   1.71899  0.76059  1.22254 7.21892 0.        0.        0.         0.       0.0278168 1.15855 1.0188   0.0840015 0.       1.11067  0.820602
+el_d = 1.37551 1.51167 0.903961 0.414192 2.97337 1.09524  0.793198 2.24592 1.24858  1.63954  0.738777 1.22254 7.21892 0.        0.        0.         0.       0.030899 1.15855  0.995903 0.        0.       1.064    0.954247
+mu_u = 1.317   1.3724  0.811615 0.28949  3.69176 0.629486 0.689079 1.56044 0.981049 0.596085 0.257965 1.26827 6.36252 0.0126648 0.0537415 0.0124512  0.057724 0.0329285 2.09669 0.       0.        0.224838 0.990952 0.843735
+mu_d = 1.317   1.55986 0.939423 0.276321 3.12458 0.730865 0.737877 1.56044 0.889107 0.582428 0.251396 1.26827 6.36252 0.0170746 0.        0.00737762 0.057724 0.0362396 2.09669 0.       0.        0.223839 1.09389  0.95742
+
+
+[correlations]
+stat                       = [ [ 1, 0 ], [ 0, 1 ] ]
+EffectiveNP-MODEL1         = [ [ 1, 1 ], [ 1, 1 ] ]
+EffectiveNP-STAT1          = [ [ 1, 1 ], [ 1, 1 ] ]
+EtaIntercalibration-Theory = [ [ 1, 1 ], [ 1, 1 ] ]
+btagsf                     = [ [ 1, 1 ], [ 1, 1 ] ]
+closeby                    = [ [ 1, 1 ], [ 1, 1 ] ]
+flavor-response            = [ [ 1, 1 ], [ 1, 1 ] ]
+ifsr                       = [ [ 1, 1 ], [ 1, 1 ] ]
+jes                        = [ [ 1, 1 ], [ 1, 1 ] ]
+lepidsf                    = [ [ 1, 1 ], [ 1, 1 ] ]
+leprecosf                  = [ [ 1, 1 ], [ 1, 1 ] ]
+lumi                       = [ [ 1, 1 ], [ 1, 1 ] ]
+mcatnlo                    = [ [ 1, 1 ], [ 1, 1 ] ]
+mu_qcd_shape               = [ [ 0, 0 ], [ 0, 1 ] ]
+muid                       = [ [ 0, 0 ], [ 0, 1 ] ]
+mums                       = [ [ 0, 0 ], [ 0, 1 ] ]
+musc                       = [ [ 0, 0 ], [ 0, 1 ] ]
+pdf                        = [ [ 1, 1 ], [ 1, 1 ] ]
+ps                         = [ [ 1, 1 ], [ 1, 1 ] ]
+qcdE                       = [ [ 1, 0 ], [ 0, 0 ] ]
+el_qcd_shape               = [ [ 1, 0 ], [ 0, 0 ] ]
+qcdM                       = [ [ 0, 0 ], [ 0, 1 ] ]
+wjets_bbccc                = [ [ 1, 1 ], [ 1, 1 ] ]
+wjets_ca                   = [ [ 1, 1 ], [ 1, 1 ] ]

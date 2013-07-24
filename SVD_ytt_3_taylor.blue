@@ -1,0 +1,39 @@
+[general]
+observables  = 1
+measurements = el mu
+uncertainties = stat bkgd_jes btagsf hadronization ifsr jer jesc_closeby jesc_effectivenp-model1 jesc_effectivenp-stat1 jesc_etaintercalibration-theory jesc_flavor-response klfittersf lep_id_sf lep_reco_sf lep_trig_sf lumi mc_generator pdf qcd wjets_bbccc wjets_ca 
+
+[measurements]
+el = 67.9222
+mu = 70.4615
+
+[uncertainties]
+el_u = 1.35939 1.25057  3.55875 1.55833 2.2529  0.      0.929548 1.44259 0.833148 0.225548 0.835079 0.       1.70908 0.761136 0.      1.2226  7.20306 0.06113   1.00928 1.10961  0.819521
+el_d = 1.35939 0.98994  2.99554 1.55833 2.2529  0.      1.09787  1.51431 0.906593 0.416817 0.795838 0.       1.63766 0.746694 0.      1.2226  7.20306 0.06113   1.00598 1.06519  0.955429
+mu_u = 1.27376 0.999557 3.69737 2.38306 1.55654 0.10146 0.626613 1.36951 0.808736 0.286649 0.686201 0.704615 0.      0.       1.11128 1.26831 6.35103 0.0704615 0.      0.990386 0.843159 
+mu_d = 1.27376 1.01215  3.1339  2.38306 1.55654 0.10146 0.73372  1.56271 0.942281 0.279218 0.740739 0.704615 0.      0.       1.0813  1.26831 6.35103 0.0704615 0.      1.09457  0.9581
+
+
+[correlations]
+stat                                 	= [ [ 1, 0 ], [ 0, 1 ] ]
+bkgd_jes        			= [ [ 1, 1 ], [ 1, 1 ] ]
+btagsf 					= [ [ 1, 1 ], [ 1, 1 ] ]
+hadronization 				= [ [ 1, 1 ], [ 1, 1 ] ]
+ifsr 					= [ [ 1, 1 ], [ 1, 1 ] ]
+jer    					= [ [ 0, 0 ], [ 0, 1 ] ]
+jesc_closeby 				= [ [ 1, 1 ], [ 1, 1 ] ]
+jesc_effectivenp-model1 		= [ [ 1, 1 ], [ 1, 1 ] ]
+jesc_effectivenp-stat1 			= [ [ 1, 1 ], [ 1, 1 ] ]
+jesc_etaintercalibration-theory 	= [ [ 1, 1 ], [ 1, 1 ] ]
+jesc_flavor-response 			= [ [ 1, 1 ], [ 1, 1 ] ]
+klfittersf				= [ [ 0, 0 ], [ 0, 1 ] ]
+lep_id_sf 				= [ [ 1, 0 ], [ 0, 0 ] ]
+lep_reco_sf 				= [ [ 1, 0 ], [ 0, 0 ] ]
+lep_trig_sf 				= [ [ 0, 0 ], [ 0, 1 ] ]
+lumi 					= [ [ 1, 1 ], [ 1, 1 ] ]
+mc_generator 				= [ [ 1, 1 ], [ 1, 1 ] ]
+pdf 					= [ [ 1, 1 ], [ 1, 1 ] ]
+qcd 					= [ [ 1, 0 ], [ 0, 0 ] ]
+wjets_bbccc 				= [ [ 1, 1 ], [ 1, 1 ] ]
+wjets_ca 				= [ [ 1, 1 ], [ 1, 1 ] ]
+

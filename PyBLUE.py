@@ -80,10 +80,14 @@ for channel in measurements_descriptions:
     
     all_unc_this_ch_u = [ float(num) for num in parser.get( "uncertainties", channel_u ).split() ]
     all_unc_this_ch_d = [ float(num) for num in parser.get( "uncertainties", channel_d ).split() ]
-    all_unc_this_ch_m = [ 0.5 * ( up + down ) for up in all_unc_this_ch_u for down in all_unc_this_ch_d ]
+    #all_unc_this_ch_m = [ 0.5 * ( up + down ) for up in all_unc_this_ch_u for down in all_unc_this_ch_d ]
+    all_unc_this_ch_m = []
+    for nx in range( len(all_unc_this_ch_u) ):
+        all_unc_this_ch_m.append( 0.5 * (all_unc_this_ch_u[nx] + all_unc_this_ch_d[nx])  )
 
     n_u = 0
     for s_unc in uncertainties_descriptions:
+#        print s_unc, n_u, channel, all_unc_this_ch_u[n_u]
         unc_ch['u'][s_unc] = all_unc_this_ch_u[n_u]
         unc_ch['m'][s_unc] = all_unc_this_ch_m[n_u]
         unc_ch['d'][s_unc] = all_unc_this_ch_d[n_u]
@@ -94,6 +98,7 @@ for channel in measurements_descriptions:
 
         
 print "INFO: Measurements:", measurements
+print
 
 correlations = {}
 for s_unc in uncertainties_descriptions:
@@ -102,15 +107,24 @@ for s_unc in uncertainties_descriptions:
 
 
 for variation in [ 'u', 'd', 'm' ]:
+    print "Variation", variation
     cov = CalcCovariance( variation )
 
     # pinv = pseudo-inverse. workaround for non-invertible matrices
+    #invcov = linalg.inv( cov )
     invcov = linalg.pinv( cov )
+    print "Inverted covariance matrix:"
+    print invcov
 
     unitvector = array( Nmeasurements * [ 1 ] )
+
     l = dot( unitvector, invcov )
     d = dot( unitvector, invcov )
     d = dot( d, unitvector.transpose() )
+#    l = dot( unitvector.transpose(), invcov )
+#    d = dot( unitvector.transpose(), invcov )
+#    d = dot( d, unitvector )
+
     l = l / d
 
     print "Combination weights for variation", variation, ":"
@@ -122,19 +136,29 @@ for variation in [ 'u', 'd', 'm' ]:
 
     blue_central[variation] = float( res )
     blue_unc[variation]     = float( totunc )
-
+    print
+    
 print
 print "/------------------------------------/"
 print
 print "Final results:"
 print
 for variation in [ 'u', 'd', 'm' ]:
-    print "Combination(%s) = %5.4f \pm %5.4f" % ( variation, blue_central[variation], blue_unc[variation] ) 
+    print "Combination(%s) = %5.4f \pm %10.7f" % ( variation, blue_central[variation], blue_unc[variation] ) 
     print
     
 # AIB
-R_u = blue_unc['u'] / ( blue_unc['u'] + blue_unc['d'] )
-sigma_u = 2. * R_u * blue_unc['m']
-sigma_d = 2. * ( 1. - R_u ) * blue_unc['m']
+#R_u = blue_unc['u'] / ( blue_unc['u'] + blue_unc['d'] )
+#sigma_u = 2. * R_u * blue_unc['m']
+#sigma_d = 2. * ( 1. - R_u ) * blue_unc['m']
+#
+#print "Combination(AIB) = %5.4f +%5.4f -%5.4f" % ( blue_central['m'], sigma_u, sigma_d )
 
-print "Combination(AIB) = %5.4f +%5.4f -%5.4f" % ( blue_central['m'], sigma_u, sigma_d )
+denom = 0.5 * ( blue_unc['u'] + blue_unc['d'] )
+factor = blue_unc['m'] / denom
+
+upperError = factor * blue_unc['u']
+lowerError = factor * blue_unc['d']
+
+print "Combination(AIB) = %10.7f +%10.7f -%10.7f" % ( blue_central['m'], upperError, lowerError )
+#print "Combination(AIB) = %10.7f +%8.7f -%8.7f" % ( blue_central['m'], blue_unc['u'], blue_unc['d'] )
